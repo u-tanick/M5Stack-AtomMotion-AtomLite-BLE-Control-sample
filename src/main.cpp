@@ -8,7 +8,6 @@ M5AtomicMotion AtomicMotion;
 #define NUM_LEDS      1
 static CRGB leds[NUM_LEDS];
 
-boolean doMotion_servo = false;
 boolean doMotion_motor = false;
 
 uint8_t ch = 0;
@@ -56,23 +55,20 @@ void loop()
 {
   if (M5.BtnA.wasPressed())
   {
-    doMotion_servo = !doMotion_servo;
     doMotion_motor = !doMotion_motor;
     setLed(CRGB::White);
     delay(2000);
     setLed(CRGB::Black);
   }
 
+  // Motor Control Sample
   if (doMotion_motor)
   {
-    // for (int ch = 0; ch < 2; ch++)
-    // {
     setLed(CRGB::Red);
     delay(2000);
     AtomicMotion.setMotorSpeed(ch, speed);
     Serial.printf("Motor Channel %d: %d \n", ch,
                   AtomicMotion.getMotorSpeed(ch));
-    // }
     delay(1500);
     AtomicMotion.setMotorSpeed(ch, 0);
     Serial.printf("Motor Channel %d: %d \n", ch,
@@ -80,39 +76,25 @@ void loop()
   }
 
   delay(1000);
-  // if (doMotion_servo)
+
+  // Servo Control Sample
+  // for (int ch = 0; ch < 4; ch++)
   // {
-  //   setLed(CRGB::Blue);
-  //   for (int ch = 0; ch < 4; ch++)
-  //   {
-  //     AtomicMotion.setServoAngle(ch, 180);
-  //     Serial.printf("Servo Channel %d: %d \n", ch,
-  //                   AtomicMotion.getServoAngle(ch));
-  //   }
-  //   delay(1000);
-  //   for (int ch = 0; ch < 4; ch++)
-  //   {
-  //     AtomicMotion.setServoAngle(ch, 90);
-  //     Serial.printf("Servo Channel %d: %d \n", ch,
-  //                   AtomicMotion.getServoAngle(ch));
-  //   }
-  //   delay(1000);
-  //   setLed(CRGB::Red);
-  //   for (int ch = 0; ch < 4; ch++)
-  //   {
-  //     AtomicMotion.setServoAngle(ch, 0);
-  //     Serial.printf("Servo Channel %d: %d \n", ch,
-  //                   AtomicMotion.getServoAngle(ch));
-  //   }
-  //   delay(1000);
-  //   for (int ch = 0; ch < 4; ch++)
-  //   {
-  //     AtomicMotion.setServoAngle(ch, 90);
-  //     Serial.printf("Servo Channel %d: %d \n", ch,
-  //                   AtomicMotion.getServoAngle(ch));
-  //   }
-  //   delay(1000);
-  //   setLed(CRGB::Black);
+  //   AtomicMotion.setServoAngle(ch, 180);
+  //   Serial.printf("Servo Channel %d: %d \n", ch,
+  //                 AtomicMotion.getServoAngle(ch));
+  // }
+  // for (int ch = 0; ch < 4; ch++)
+  // {
+  //   AtomicMotion.setServoAngle(ch, 90);
+  //   Serial.printf("Servo Channel %d: %d \n", ch,
+  //                 AtomicMotion.getServoAngle(ch));
+  // }
+  // for (int ch = 0; ch < 4; ch++)
+  // {
+  //   AtomicMotion.setServoAngle(ch, 0);
+  //   Serial.printf("Servo Channel %d: %d \n", ch,
+  //                 AtomicMotion.getServoAngle(ch));
   // }
 
   M5.update();
