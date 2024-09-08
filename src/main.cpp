@@ -4,16 +4,24 @@
 
 M5AtomicMotion AtomicMotion;
 
-#define LED_PIN       27
-#define NUM_LEDS      1
-static CRGB leds[NUM_LEDS];
+// #define PROD_OR_TEST
+#ifdef PROD_OR_TEST
+constexpr bool prod_flg = true;
+#else
+constexpr bool prod_flg = false;
+#endif
 
-boolean doMotion_motor = false;
+boolean doMotion_flg = false;
 
 uint8_t ch = 0;
 uint8_t speed = 90;
 
-void setLed(CRGB color) {
+#define LED_PIN 27
+#define NUM_LEDS 1
+static CRGB leds[NUM_LEDS];
+
+void setLed(CRGB color)
+{
   // change RGB to GRB
   uint8_t t = color.r;
   color.r = color.g;
@@ -41,7 +49,8 @@ void setup()
   FastLED.addLeds<WS2811, LED_PIN, RGB>(leds, NUM_LEDS);
   FastLED.setBrightness(255 * 15 / 100);
 
-  for (int i = 0; i < 4; i++){
+  for (int i = 0; i < 4; i++)
+  {
     setLed(CRGB::Green);
     delay(500);
     setLed(CRGB::Black);
@@ -53,16 +62,18 @@ void setup()
 
 void loop()
 {
+  M5.update();
+
   if (M5.BtnA.wasPressed())
   {
-    doMotion_motor = !doMotion_motor;
+    doMotion_flg = !doMotion_flg;
     setLed(CRGB::White);
     delay(2000);
     setLed(CRGB::Black);
   }
 
-  // Motor Control Sample
-  if (doMotion_motor)
+  // prod : Motor Control Sample
+  if (prod_flg && doMotion_flg)
   {
     setLed(CRGB::Red);
     delay(2000);
@@ -73,29 +84,23 @@ void loop()
     AtomicMotion.setMotorSpeed(ch, 0);
     Serial.printf("Motor Channel %d: %d \n", ch,
                   AtomicMotion.getMotorSpeed(ch));
+    delay(1000);
   }
 
-  delay(1000);
-
-  // Servo Control Sample
-  // for (int ch = 0; ch < 4; ch++)
-  // {
-  //   AtomicMotion.setServoAngle(ch, 180);
-  //   Serial.printf("Servo Channel %d: %d \n", ch,
-  //                 AtomicMotion.getServoAngle(ch));
-  // }
-  // for (int ch = 0; ch < 4; ch++)
-  // {
-  //   AtomicMotion.setServoAngle(ch, 90);
-  //   Serial.printf("Servo Channel %d: %d \n", ch,
-  //                 AtomicMotion.getServoAngle(ch));
-  // }
-  // for (int ch = 0; ch < 4; ch++)
-  // {
-  //   AtomicMotion.setServoAngle(ch, 0);
-  //   Serial.printf("Servo Channel %d: %d \n", ch,
-  //                 AtomicMotion.getServoAngle(ch));
-  // }
-
-  M5.update();
+  // not prod : Servo Control Sample
+  if (!prod_flg && doMotion_flg)
+  {
+    AtomicMotion.setServoAngle(ch, 135);
+    Serial.printf("Servo Channel %d: %d \n", ch,
+                  AtomicMotion.getServoAngle(ch));
+    delay(1000);
+    AtomicMotion.setServoAngle(ch, 45);
+    Serial.printf("Servo Channel %d: %d \n", ch,
+                  AtomicMotion.getServoAngle(ch));
+    delay(1000);
+    AtomicMotion.setServoAngle(ch, 0);
+    Serial.printf("Servo Channel %d: %d \n", ch,
+                  AtomicMotion.getServoAngle(ch));
+    delay(1000);
+  }
 }
