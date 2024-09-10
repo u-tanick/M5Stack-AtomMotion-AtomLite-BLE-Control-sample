@@ -1,4 +1,4 @@
-# AtomMotion-AtomLite-BLE-Control-sample
+# M5Stack-AtomMotion-AtomLite-BLE-Control-sample
 
 ## 概要
 
