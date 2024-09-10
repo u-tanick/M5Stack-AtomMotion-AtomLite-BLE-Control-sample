@@ -2,7 +2,7 @@
 
 ## 概要
 
-M5StackのAtomicMotionをBluetoothで操作するサンプルです。
+M5StackのAtomicMotion（AtomLite付）をBluetoothで操作するサンプルです。
 
 100均ショップなどで売っているBluetoothシャッターボタンで動作します。
 
